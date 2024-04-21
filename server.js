@@ -22,20 +22,18 @@ io.on('connection', (socket) => {
 
   console.log("User " + participantId + " connected");
 
-  // Send current votes, poll status, and participant ID status when a participant joins
-  io.emit('update-votes', votes);
-  io.emit('poll-status', isPollOpen);
-
-  if (!participantId) {
+  if (participantId == "null") {
     // If the participant doesn't have an ID, assign the socket ID
     console.log("Assigned a new Id to " + socket.id);
     io.to(socket.id).emit('set-cookie', { participantId: socket.id, hasVoted: false });
   } else if (participantId == "resultBoard"){
-    } else {
+    io.to(socket.id).emit('update-votes', votes);
+  } else {
     // If the participant has an ID, check if they have already voted
     const hasVoted = votedParticipants[participantId] || false;
-    io.to(socket.id).emit('check-vote-status', { participantId, hasVoted });
+    io.to(socket.id).emit('update-status', { participantId, isPollOpen, hasVoted });
   }
+
 
   // Handle participant voting
   socket.on('vote', ({ option, participantId, socketId }) => {
@@ -47,11 +45,8 @@ io.on('connection', (socket) => {
       votes[option]++;
       votedParticipants[participantId] = true;
       io.emit('update-votes', votes);
-      io.to(socketId).emit('check-vote-status', { participantId, hasVoted: true }); // Communicate back to the participant that they have voted
     } else {
-        console.log("Vote ignored");
-        io.emit('update-votes', votes);
-        io.to(socketId).emit('check-vote-status', { participantId, hasVoted: true });
+      console.log("Vote ignored");
     }
   });
 
@@ -63,30 +58,21 @@ io.on('connection', (socket) => {
     votedParticipants = {};
     isPollOpen = true;
 
-    // Broadcast the reset to all participants
-    io.emit('update-votes', votes);
-    io.emit('poll-status', isPollOpen);
+    // Broadcast the reset to all participants and result board
     io.emit('reset');
-  });
-
-  // Handle poll status request
-  socket.on('get-poll-status', (socketId) => {
-    // Send the current poll status to the requesting participant
-    io.to(socketId).emit('poll-status', isPollOpen);
+    io.emit('update-votes', votes);
   });
 
   // Handle open poll action
   socket.on('open-poll', () => {
     // Set the poll as open and broadcast the status to all participants
     isPollOpen = true;
-    io.emit('poll-status', isPollOpen);
   });
 
   // Handle close poll action
   socket.on('close-poll', () => {
     // Set the poll as closed and broadcast the status to all participants
     isPollOpen = false;
-    io.emit('poll-status', isPollOpen);
   });
 });
 

@@ -34,7 +34,6 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('update-status', { participantId, isPollOpen, hasVoted });
   }
 
-
   // Handle participant voting
   socket.on('vote', ({ option, participantId, socketId }) => {
     console.log(participantId + " on socket " + socketId + " has voted for " + option);

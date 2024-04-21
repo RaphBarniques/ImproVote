@@ -30,6 +30,7 @@
 
     // Handle updates to the voting results
     socket.on('update-votes', (votes) => {
+      console.log("Recieved vote update");
       document.getElementById('option1-votes').innerText = votes.option1;
       document.getElementById('option2-votes').innerText = votes.option2;
     });

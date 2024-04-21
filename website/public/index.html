@@ -31,19 +31,17 @@
         socketId = socket.id;
         console.log(socketId);
       });
-
-    // Request poll status from the server when the page loads
-    socket.emit('get-poll-status', { participantId: localStorage.getItem('participantId'), socketId});
-
+    
     // If participant doesn't have an ID, set it
     socket.on('set-cookie', ({ participantId, hasVoted }) => {
       localStorage.setItem('participantId', participantId);
       localStorage.setItem('hasVoted', hasVoted);
     });
 
-    socket.on('poll-status', (isOpen) => {
-    const hasVoted = localStorage.getItem('hasVoted')
-      if (isOpen) {
+    socket.on('update-status', ({ participantId, isPollOpen, hasVoted }) => {
+      console.log("Received update : isOpen = " + isPollOpen + ", hasVoted = " + hasVoted)
+      if (isPollOpen == true && hasVoted == false) {
+
         openVote();
       } else {
         closeVote();
@@ -53,41 +51,31 @@
     function openVote() {
       document.getElementById("btnPanel").style.display = "block";
       document.getElementById("messagePanel").style.display = "none";
+      console.log("Vote opened");
     }
 
     function closeVote() {
       document.getElementById("btnPanel").style.display = "none";
       document.getElementById("messagePanel").style.display = "block";
+      console.log("Vote closed");
     }
 
     function vote(option) {
       const participantId = localStorage.getItem('participantId');
-      const hasVoted = localStorage.getItem('hasVoted') === 'true';
 
       // Send the vote and participant ID to the server
       socket.emit('vote', { option, participantId, socketId });
-
-      if (!hasVoted) {
-        // Set hasVoted to true in localStorage
-        localStorage.setItem('hasVoted', true);
-      }
       document.getElementById("vote").innerText = option;
+
+      // Close interface
+      closeVote();
     }
 
     socket.on('reset', () => {
       openVote();
-      localStorage.setItem('hasVoted', false);
       console.log("Votes reset");
     });
 
-    // Check if the participant has already voted
-    socket.on('check-vote-status', ({ participantId, hasVoted }) => {
-      if (hasVoted) {
-        closeVote();
-      } else {
-        openVote();
-      }
-    });
   </script>
 </body>
 </html>

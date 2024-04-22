@@ -31,7 +31,7 @@
         socketId = socket.id;
         console.log(socketId);
       });
-    
+
     // If participant doesn't have an ID, set it
     socket.on('set-cookie', ({ participantId, hasVoted }) => {
       localStorage.setItem('participantId', participantId);
@@ -41,7 +41,6 @@
     socket.on('update-status', ({ participantId, isPollOpen, hasVoted }) => {
       console.log("Received update : isOpen = " + isPollOpen + ", hasVoted = " + hasVoted)
       if (isPollOpen == true && hasVoted == false) {
-
         openVote();
       } else {
         closeVote();
@@ -69,6 +68,7 @@
 
       // Close interface
       closeVote();
+
     }
 
     socket.on('reset', () => {

@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: antiquewhite;
+    background-image: url(bg.png);
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    font-family: "MedievalSharp", cursive;
+    font-size: 7vw;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px;
+    padding-inline: 0px;
+    box-sizing: border-box;
+}
+
+#top, #bottom {
+    display: flex;
+    justify-content: center;
+}
+
+#vote, #otherText {
+
+}
+
+#sent, #waiting, #waitingImage {
+
+}
+
+.options, .nextTeams {
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    padding-bottom: 0px;
+}
+
+.option, .nextTeam {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logoMain {
+    width: 40%;
+}
+
+.match, .nextText, #nextDate {
+    text-align: center;
+    padding-inline: 25px;
+}
+
+.logoOption {
+    width: 100%;
+    filter: drop-shadow(5px 5px 5px #885e28);
+}
+
+.team {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+    padding-top: 10px;
+    filter: drop-shadow(5px 5px 5px #885e28);
+}
+
+.note {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    padding-inline: 35px;
+}
+
+.source {
+    font-size: 12px;
+    font-weight: 200;
+}
+
+.sponsor {
+    width: 40%;
+    padding-bottom: 20px;
+}
+
+#waiting {
+    text-align: center;
+    padding-inline: 35px;
+}
+
+#waitingImage {
+    width: 75%;
+}

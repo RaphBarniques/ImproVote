@@ -10,14 +10,63 @@
 <body>
   <h1>Voting Results</h1>
   <div id="resultPanel">
-    <p>Option 1 Votes: <span id="option1-votes">0</span></p>
-    <p>Option 2 Votes: <span id="option2-votes">0</span></p>
+    <p><span id="option1-option">Option 1</span> : <span id="option1-votes">0</span></p>
+    <p><span id="option2-option">Option 2</span> : <span id="option2-votes">0</span></p>
   </div>
 
+  <h1>Controls</h1>
   <div id="controlPanel">
     <button onclick="openPoll()">Open Poll</button>
     <button onclick="closePoll()">Close Poll</button>
     <button onclick="resetVotes()">Reset Votes</button>
+    <br>
+    <div>Up next</div>
+    <select name="" id="voteType" onchange="showSection(this.value)">
+      <option value="2teams">2 Teams</option>
+      <option value="nextWeek">Next Week</option>
+    </select>
+    <br>
+    <div class="section" id="2teams">
+      <select name="" id="2teams-team1">
+        <option value="Paladins">Paladins</option>
+        <option value="Barbares">Barbares</option>
+        <option value="Druides">Druides</option>
+        <option value="Bardes">Bardes</option>
+        <option value="Mages">Mages</option>
+      </select>
+      <select name="" id="2teams-team2">
+        <option value="Paladins">Paladins</option>
+        <option value="Barbares">Barbares</option>
+        <option value="Druides">Druides</option>
+        <option value="Bardes">Bardes</option>
+        <option value="Mages">Mages</option>
+      </select>
+      <button onclick="changeOptions()">Change options</button>
+    </div>
+    <div class="section" id="nextWeek" style="display: none;">
+      <input type="date" id="next-date" name="" value=""/>
+      <script>
+        date = new Date();
+        date.setDate(date.getDate() + 7);
+        document.getElementById("next-date").value = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
+        console.log(date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate())
+      </script>
+      <select name="" id="next-team1">
+        <option value="Paladins">Paladins</option>
+        <option value="Barbares">Barbares</option>
+        <option value="Druides">Druides</option>
+        <option value="Bardes">Bardes</option>
+        <option value="Mages">Mages</option>
+      </select>
+      <select name="" id="next-team2">
+        <option value="Paladins">Paladins</option>
+        <option value="Barbares">Barbares</option>
+        <option value="Druides">Druides</option>
+        <option value="Bardes">Bardes</option>
+        <option value="Mages">Mages</option>
+      </select>
+      <button onclick="displayNext()">Display</button>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
@@ -35,6 +84,13 @@
       document.getElementById('option2-votes').innerText = votes.option2;
     });
 
+    // Handle updates to the options
+    socket.on('update-options', (options) => {
+      console.log("Recieved option update");
+      document.getElementById('option1-option').innerText = options.option1;
+      document.getElementById('option2-option').innerText = options.option2;
+    });
+
     // Handle poll status changes
     function openPoll() {
       socket.emit('open-poll');
@@ -47,6 +103,35 @@
     function resetVotes() {
       socket.emit('reset-votes');
     }
+
+    function showSection(value) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(div => {
+        div.style.display = 'none';
+      });
+
+      if (value) {
+        const div = document.getElementById(value);
+        if (div) {
+            div.style.display = 'block';
+        }
+    }
+    }
+
+    // Handle voting option change
+    function changeOptions() {
+      option = {option1: document.getElementById('2teams-team1').value, option2: document.getElementById('2teams-team2').value}
+      socket.emit('change-options', option);
+    }
+
+    function displayNext() {
+      date = document.getElementById("next-date").value;
+      team1 = document.getElementById("next-team1").value;
+      team2 = document.getElementById("next-team2").value;
+      socket.emit('set-display-next', date, team1, team2);
+    }
+
+
   </script>
 </body>
 </html>

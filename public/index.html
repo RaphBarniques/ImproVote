@@ -15,7 +15,7 @@
   </div>
 
   <div id="messagePanel" style="display: none;">
-    <h3>Vote for <strong id="vote">Vote</strong> submitted</h3>
+    <h3>Vote submitted</h3>
     <h3>Waiting for next vote</h3>
   </div>
   
@@ -42,21 +42,56 @@
       console.log("Received update : isOpen = " + isPollOpen + ", hasVoted = " + hasVoted)
       if (isPollOpen == true && hasVoted == false) {
         openVote();
-      } else {
+      } else if (isPollOpen == false) {
         closeVote();
       }
     });
 
+    // Handle updates to the options
+    socket.on('update-options', (options) => {
+      console.log("Recieved option update");
+      document.getElementById('name1').innerText = options.option1;
+      document.getElementById('name2').innerText = options.option2;
+    });
+
+    socket.on('display-next', (date, team1, team2) => {
+      console.log("Recieved next display update");
+      document.getElementById('nextName1').innerText = options.option1;
+      document.getElementById('nextName2').innerText = options.option2;
+      displayNext();
+    });
+
     function openVote() {
-      document.getElementById("btnPanel").style.display = "block";
-      document.getElementById("messagePanel").style.display = "none";
+      document.getElementById("vote").style.display = "block";
+      document.getElementById("otherText").style.display = "block";
+      document.getElementById("sent").style.display = "none";
+      document.getElementById("waiting").style.display = "none";
+      document.getElementById("waitingImage").style.display = "none";
+      document.getElementById("nextWeek").style.display = "none";
+      document.getElementById("nextDate").style.display = "none";
       console.log("Vote opened");
     }
 
     function closeVote() {
-      document.getElementById("btnPanel").style.display = "none";
-      document.getElementById("messagePanel").style.display = "block";
+      document.getElementById("vote").style.display = "none";
+      document.getElementById("otherText").style.display = "none";
+      document.getElementById("sent").style.display = "block";
+      document.getElementById("waiting").style.display = "block";
+      document.getElementById("waitingImage").style.display = "block";
+      document.getElementById("nextWeek").style.display = "none";
+      document.getElementById("nextDate").style.display = "none";
       console.log("Vote closed");
+    }
+
+    function displayNext() {
+      document.getElementById("vote").style.display = "none";
+      document.getElementById("otherText").style.display = "none";
+      document.getElementById("sent").style.display = "none";
+      document.getElementById("waiting").style.display = "none";
+      document.getElementById("waitingImage").style.display = "none";
+      document.getElementById("nextWeek").style.display = "block";
+      document.getElementById("nextDate").style.display = "block";
+      console.log("Displaying next week");
     }
 
     function vote(option) {
@@ -64,11 +99,9 @@
 
       // Send the vote and participant ID to the server
       socket.emit('vote', { option, participantId, socketId });
-      document.getElementById("vote").innerText = option;
 
       // Close interface
       closeVote();
-
     }
 
     socket.on('reset', () => {

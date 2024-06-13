@@ -101,17 +101,17 @@
         socket.on('update-options', (options) => {
         console.log("Recieved option update");
         document.getElementById('name1').innerText = options.option1;
-        document.getElementById('logoOption1').src = options.option1+".png";
+        document.getElementById('logoOption1').src = "/vote/public/"+options.option1+".png";
         document.getElementById('name2').innerText = options.option2;
-        document.getElementById('logoOption2').src = options.option2+".png";
+        document.getElementById('logoOption2').src = "/vote/public/"+options.option2+".png";
         });
 
         socket.on('display-next', (date, team1, team2) => {
         console.log("Recieved next display update");
         document.getElementById('next-name1').innerText = team1;
-        document.getElementById('next-logo1').src = team1+".png";
+        document.getElementById('next-logo1').src = "/vote/public/"+team1+".png";
         document.getElementById('next-name2').innerText = team2;
-        document.getElementById('next-logo2').src = team2+".png";
+        document.getElementById('next-logo2').src = "/vote/public/"+team2+".png";
         document.getElementById('next-date').innerText = date;
         displayNext();
         });

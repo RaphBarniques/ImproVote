@@ -8,6 +8,23 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+const fs = require('fs')
+const custom = {
+  log(text) {
+    const date = new Date();
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth()+ 1)).slice(-2);
+    const year = date.getFullYear();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+    const formattedDate = '['+day+'-'+month+'-'+year+', '+hour+':'+minute+':'+second+'] ';
+    fs.appendFile('server_logs.txt', formattedDate + text + '\n', (err) => {if (err) throw err;});
+  }
+}
+
+custom.log("Program started");
+
 // Participants and Votes data
 let votes = { option1: 0, option2: 0 };
 let options = { option1: "Option 1", option2: "Option 2" };
@@ -25,11 +42,11 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', (socket) => {
   const {participantId} = socket.handshake.query;
 
-  console.log("User " + participantId + " connected");
+  custom.log("User " + participantId + " connected");
 
   if (participantId == "null") {
     // If the participant doesn't have an ID, assign the socket ID
-    console.log("Assigned a new Id to " + socket.id);
+    custom.log("Assigned a new Id to " + socket.id);
     io.to(socket.id).emit('set-cookie', { participantId: socket.id, hasVoted: false });
     io.to(socket.id).emit('update-options', options);
     const hasVoted = votedParticipants[participantId] || false;
@@ -51,23 +68,23 @@ io.on('connection', (socket) => {
 
   // Handle participant voting
   socket.on('vote', ({ option, participantId, socketId }) => {
-    console.log(participantId + " on socket " + socketId + " has voted for " + option);
+    custom.log(participantId + " on socket " + socketId + " has voted for " + option);
     // Check if the participant has not voted before and if the poll is open
     if (!votedParticipants[participantId] && isPollOpen) {
-        console.log("Vote registered");
+        custom.log("Vote registered");
       // Update votes and add participant to votedParticipants list
       votes[option]++;
       votedParticipants[participantId] = true;
       io.emit('update-votes', votes);
     } else {
-      console.log("Vote ignored");
+      custom.log("Vote ignored");
     }
   });
 
   // Handle vote reset
   socket.on('reset-votes', () => {
     // Reset votes and participants who have voted
-    console.log("Votes reset");
+    custom.log("Votes reset");
     votes = { option1: 0, option2: 0 };
     votedParticipants = {};
     isPollOpen = true;
@@ -114,7 +131,7 @@ io.on('connection', (socket) => {
 });
 
 // Serve the main page
-app.get('/', (req, res) => {
+app.get('/guilde', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
@@ -123,8 +140,14 @@ app.get('/result', (req, res) => {
   res.sendFile(__dirname + '/public/result.html');
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  custom.log(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  custom.log(`Server is running on http://localhost:${PORT}`);
 });

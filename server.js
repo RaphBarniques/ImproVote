@@ -15,9 +15,9 @@ const custom = {
     const day = ('0' + date.getDate()).slice(-2);
     const month = ('0' + (date.getMonth()+ 1)).slice(-2);
     const year = date.getFullYear();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const second = date.getSeconds();
+    const hour = ('0' + (date.getHours())).slice(-2);
+    const minute = ('0' + (date.getMinutes())).slice(-2);
+    const second = ('0' + (date.getSeconds())).slice(-2);
     const formattedDate = '['+day+'-'+month+'-'+year+', '+hour+':'+minute+':'+second+'] ';
     fs.appendFile('server_logs.txt', formattedDate + text + '\n', (err) => {if (err) throw err;});
   }
@@ -42,7 +42,7 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', (socket) => {
   const {participantId} = socket.handshake.query;
 
-  custom.log("User " + participantId + " connected");
+  custom.log("User " + participantId + " connected on socket " + socket.id);
 
   if (participantId == "null") {
     // If the participant doesn't have an ID, assign the socket ID
@@ -99,12 +99,14 @@ io.on('connection', (socket) => {
     // Set the poll as open and broadcast the status to all participants
     isPollOpen = true;
     matchEnded = false;
+    custom.log("Poll opened")
   });
 
   // Handle close poll action
   socket.on('close-poll', () => {
     // Set the poll as closed and broadcast the status to all participants
     isPollOpen = false;
+    custom.log("Poll closed")
   });
 
   // Handle displaying next week action
@@ -116,6 +118,7 @@ io.on('connection', (socket) => {
     nextTeam1 = team1;
     nextTeam2 = team2;
     io.emit('display-next', date, team1, team2);
+    custom.log("Display was set for next match (" + team1 + ", " + team2 + ")")
   });
 
   // Handle option changes
@@ -126,6 +129,7 @@ io.on('connection', (socket) => {
 
     // Broadcast to all participants and result board
     io.emit('update-options', options);
+    custom.log("Options set for " + option.option1 + ", " + option.option2)
   });
 
 });

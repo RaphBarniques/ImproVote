@@ -1,0 +1,91 @@
+[13-06-2024, 17:18:0] Program started
+[13-06-2024, 17:18:0] Server is running on http://localhost:3000
+[13-06-2024, 17:19:44] User null connected
+[13-06-2024, 17:19:44] Assigned a new Id to kBBUR5sTenS6cc-fAAAB
+[13-06-2024, 17:20:2] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:20:13] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:20:15] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:20:50] User sbGNBOECIj7C_iyQAAAD connected
+[13-06-2024, 17:20:58] User sbGNBOECIj7C_iyQAAAD connected
+[13-06-2024, 17:21:1] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:21:45] User sbGNBOECIj7C_iyQAAAD connected
+[13-06-2024, 17:21:47] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:21:49] User kBBUR5sTenS6cc-fAAAB connected
+[13-06-2024, 17:22:0] User sbGNBOECIj7C_iyQAAAD connected
+[13-06-2024, 17:22:14] User sbGNBOECIj7C_iyQAAAD connected
+[13-06-2024, 17:22:20] User resultBoard connected
+[13-06-2024, 17:22:51] Vote registered
+[13-06-2024, 17:22:51] sbGNBOECIj7C_iyQAAAD on socket p54tTXbWXHkfNISrAAAV has voted for option1
+[13-06-2024, 17:22:51] Vote registered
+[13-06-2024, 17:22:51] kBBUR5sTenS6cc-fAAAB on socket e_Imuv8HfcmQ3GWBAAAT has voted for option2
+[13-06-2024, 17:28:19] Program started
+[13-06-2024, 17:28:19] Server is running on http://localhost:3000
+[13-06-2024, 17:28:19] User kBBUR5sTenS6cc-fAAAB connected on socket zgs9iNdxjyw6AOUtAAAB
+[13-06-2024, 17:28:19] User sbGNBOECIj7C_iyQAAAD connected on socket yAOwbk1gVy6ao_r7AAAE
+[13-06-2024, 17:28:19] User resultBoard connected on socket LOucu1C455aFO-4XAAAF
+[13-06-2024, 17:28:51] Options set for Paladins, Barbares
+[13-06-2024, 17:29:3] Poll opened
+[13-06-2024, 17:29:5] Poll opened
+[13-06-2024, 17:29:17] Poll opened
+[13-06-2024, 17:32:38] Program started
+[13-06-2024, 17:32:38] Server is running on http://localhost:3000
+[13-06-2024, 17:32:42] User resultBoard connected on socket exMhypxeF5cs5CKDAAAC
+[13-06-2024, 17:32:42] User sbGNBOECIj7C_iyQAAAD connected on socket IMg24leegLoevPGSAAAD
+[13-06-2024, 17:32:44] User kBBUR5sTenS6cc-fAAAB connected on socket CPVy-EB7Xe4nWwHcAAAF
+[13-06-2024, 17:33:38] Poll closed
+[13-06-2024, 17:33:38] Poll closed
+[13-06-2024, 17:33:38] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:39] Poll closed
+[13-06-2024, 17:33:40] Poll closed
+[13-06-2024, 17:33:40] Poll closed
+[13-06-2024, 17:33:40] Poll closed
+[13-06-2024, 17:33:41] User resultBoard connected on socket nk6MPgoc4DTYBY_fAAAH
+[13-06-2024, 17:33:42] Poll closed
+[13-06-2024, 17:33:42] Poll closed
+[13-06-2024, 17:33:42] Poll closed
+[13-06-2024, 17:33:43] Poll closed
+[13-06-2024, 17:33:43] Poll closed
+[13-06-2024, 17:33:43] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:52] Poll closed
+[13-06-2024, 17:33:53] Poll closed
+[13-06-2024, 17:33:53] Poll closed
+[13-06-2024, 17:33:53] Poll closed
+[13-06-2024, 17:33:53] Poll closed
+[13-06-2024, 17:33:56] Poll closed
+[13-06-2024, 17:33:56] Poll closed
+[13-06-2024, 17:33:56] Poll closed
+[13-06-2024, 17:33:56] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:33:57] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:00] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:01] Poll closed
+[13-06-2024, 17:34:14] Options set for Paladins, Barbares
+[13-06-2024, 17:34:16] Poll closed

@@ -74,7 +74,7 @@
         const socket = io({
         query: {
             participantId: localStorage.getItem('participantId'),
-        },
+        }, path :"/guilde/socket.io/"
         });
         let socketId;
         socket.on('connect', () => {

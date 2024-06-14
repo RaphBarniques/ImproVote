@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
   socket.on('vote', ({ option, participantId, socketId }) => {
     custom.log(participantId + " on socket " + socketId + " has voted for " + option);
     // Check if the participant has not voted before and if the poll is open
-    if (!votedParticipants[participantId] && isPollOpen) {
+    if (!votedParticipants[participantId] && isPollOpen && option in options) {
         custom.log("Vote registered");
       // Update votes and add participant to votedParticipants list
       votes[option]++;

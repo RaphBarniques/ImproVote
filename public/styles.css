@@ -89,7 +89,8 @@ body {
 
 .sponsor {
     width: 40%;
-    padding-bottom: 20px;
+    padding: 15px;
+    padding-bottom: 30px;
 }
 
 #waiting {

@@ -4,6 +4,7 @@ body {
     position: fixed;
     width: 100vw;
     height: 100vh;
+    height: calc(var(--vh, 1vh)*100);
     background-color: antiquewhite;
     background-image: url(bg.png);
     background-size: 100vw 100vh;

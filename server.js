@@ -91,7 +91,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', (socket) => {
-    connectionCount--;
+    if (participantId != "resultBoard") {
+      connectionCount--;
+    }
     io.emit('update-count', connectionCount);
     custom.log("User " + participantId + " disconnected on socket " + socket.id);
   });

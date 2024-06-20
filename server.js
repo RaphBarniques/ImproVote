@@ -36,6 +36,8 @@ let nextDate;
 let nextTeam1;
 let nextTeam2;
 let votedParticipants = {};
+let connectionCount = 0;
+let savedStats = [];
 
 // Serve HTML and static files
 app.use(express.static(__dirname + '/public'));
@@ -45,6 +47,8 @@ io.on('connection', (socket) => {
   const {participantId} = socket.handshake.query;
 
   custom.log("User " + participantId + " connected on socket " + socket.id);
+  connectionCount++;
+  io.emit('update-count', connectionCount);
 
   if (participantId == "null") {
     // If the participant doesn't have an ID, assign the socket ID
@@ -55,7 +59,9 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('update-status', { participantId, isPollOpen, hasVoted});
   } else if (participantId == "resultBoard"){
     io.to(socket.id).emit('update-votes', votes);
-    io.to(socket.id).emit('update-options', options);  
+    io.to(socket.id).emit('update-options', options);
+    connectionCount--;
+    io.emit('update-count', connectionCount);
   } else {
     // If the participant has an ID, check if they have already voted
     const hasVoted = votedParticipants[participantId] || false;
@@ -81,6 +87,11 @@ io.on('connection', (socket) => {
     } else {
       custom.log("Vote ignored");
     }
+  });
+
+  io.on('disconnect', (socket) => {
+    connectionCount--;
+    io.emit('update-count', connectionCount);
   });
 
   // Handle vote reset
@@ -132,6 +143,11 @@ io.on('connection', (socket) => {
     // Broadcast to all participants and result board
     io.emit('update-options', options);
     custom.log("Options set for " + option.option1 + ", " + option.option2)
+  });
+
+  socket.on('set-stats', (currentStats) => {
+    savedStats = currentStats;
+    io.emit('update-stats', savedStats);
   });
 
 });

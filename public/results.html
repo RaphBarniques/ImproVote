@@ -12,6 +12,7 @@
   <div id="resultPanel">
     <p><span id="option1-option">Option 1</span> : <span id="option1-votes">0</span></p>
     <p><span id="option2-option">Option 2</span> : <span id="option2-votes">0</span></p>
+    <p><span>Active connections</span> : <span id="connections">0</span></p>
   </div>
 
   <h1>Controls</h1>
@@ -67,6 +68,170 @@
       </select>
       <button onclick="displayNext()">Display</button>
     </div>
+    <h1>Stats</h1>
+    <div>
+      <table>
+        <tr>
+          <th>Impro</th>
+          <th id="statsTeam1">Team1</th>
+          <th id="statsTeam2">Team2</th>
+        </tr>
+        <tr>
+          <td>
+            Impro 1
+          </td>
+          <td>
+            <input type="radio" name="impro1" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro1" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 2
+          </td>
+          <td>
+            <input type="radio" name="impro2" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro2" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 3
+          </td>
+          <td>
+            <input type="radio" name="impro3" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro3" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 4
+          </td>
+          <td>
+            <input type="radio" name="impro4" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro4" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 5
+          </td>
+          <td>
+            <input type="radio" name="impro5" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro5" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 6
+          </td>
+          <td>
+            <input type="radio" name="impro6" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro6" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 7
+          </td>
+          <td>
+            <input type="radio" name="impro7" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro7" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 8
+          </td>
+          <td>
+            <input type="radio" name="impro8" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro8" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        <tr>
+          <td>
+            Impro 9
+          </td>
+          <td>
+            <input type="radio" name="impro9" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro9" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 10
+          </td>
+          <td>
+            <input type="radio" name="impro10" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro10" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 11
+          </td>
+          <td>
+            <input type="radio" name="impro11" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro11" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Impro 12
+          </td>
+          <td>
+            <input type="radio" name="impro12" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro12" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Prolong
+          </td>
+          <td>
+            <input type="radio" name="impro13" class="statsRadio stats1" onchange="saveStats()">
+          </td>
+          <td>
+            <input type="radio" name="impro13" class="statsRadio stats2" onchange="saveStats()">
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Results</strong></td>
+          <td>
+            <span id="statsCount1">0</span>
+          </td>
+          <td>
+            <span id="statsCount2">0</span>
+          </td>
+        </tr>
+      </table>
+      <button onclick="clearStats()">Clear</button>
+    </div>
+      
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
@@ -88,7 +253,25 @@
     socket.on('update-options', (options) => {
       console.log("Recieved option update");
       document.getElementById('option1-option').innerText = options.option1;
+      document.getElementById('statsTeam1').innerText = options.option1;
       document.getElementById('option2-option').innerText = options.option2;
+      document.getElementById('statsTeam2').innerText = options.option2;
+    });
+
+    socket.on('update-count', (connectionsCount) => {
+      console.log("Recieved count update");
+      document.getElementById('connections').innerText = connectionsCount;
+    });
+
+    socket.on('update-stats', (currentStats) => {
+      console.log("Recieved stats update");
+      let radios = document.getElementsByClassName("statsRadio");
+      for (let i = 0; i<currentStats.length; i++) {
+        if (currentStats[i]==true) {
+          radios[i].checked = true;
+        }
+      };
+      updateStats();
     });
 
     // Handle poll status changes
@@ -129,6 +312,44 @@
       team1 = document.getElementById("next-team1").value;
       team2 = document.getElementById("next-team2").value;
       socket.emit('set-display-next', date, team1, team2);
+    }
+
+    function saveStats() {
+      let currentStats = [];
+      let radios = document.getElementsByClassName("statsRadio");
+      for (let i = 0; i<radios.length; i++) {
+        currentStats.push(radios[i].checked);
+      };
+      socket.emit('set-stats', currentStats);
+      updateStats();
+    }
+
+    function updateStats(){
+      let points1 = 0;
+      let stats1 = document.getElementsByClassName("stats1");
+      for (let i = 0; i<stats1.length; i++) {
+        if (stats1[i].checked) {
+          points1++;
+        }
+      };
+      document.getElementById("statsCount1").innerText = points1;
+
+      let points2 = 0;
+      let stats2 = document.getElementsByClassName("stats2");
+      for (let i = 0; i<stats2.length; i++) {
+        if (stats2[i].checked) {
+          points2++;
+        }
+      };
+      document.getElementById("statsCount2").innerText = points2;
+    }
+
+    function clearStats() {
+      let radios = document.getElementsByClassName("statsRadio");
+      for (let i = 0; i<radios.length; i++) {
+          radios[i].checked = false;
+      };
+      updateStats();
     }
 
 

@@ -60,6 +60,7 @@ io.on('connection', (socket) => {
   } else if (participantId == "resultBoard"){
     io.to(socket.id).emit('update-votes', votes);
     io.to(socket.id).emit('update-options', options);
+    io.to(socket.id).emit('update-stats', savedStats);
     connectionCount--;
     io.emit('update-count', connectionCount);
   } else {

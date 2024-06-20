@@ -90,9 +90,10 @@ io.on('connection', (socket) => {
     }
   });
 
-  io.on('disconnect', (socket) => {
+  socket.on('disconnect', (socket) => {
     connectionCount--;
     io.emit('update-count', connectionCount);
+    custom.log("User " + participantId + " disconnected on socket " + socket.id);
   });
 
   // Handle vote reset

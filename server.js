@@ -161,6 +161,10 @@ app.get('/guilde', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/list', (req, res) => {
+  res.sendFile(__dirname + '/public/list.html');
+});
+
 // Serve the result page
 app.get('/result', (req, res) => {
   res.sendFile(__dirname + '/public/result.html');

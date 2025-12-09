@@ -72,6 +72,10 @@
         if (hasVoted) {lockVote(); restoreVote();} else {unlockVote(); localStorage.setItem('lastVote', null);};
     });
 
+    socket.on('update-proposition', (proposition) => {
+        document.querySelector(".proposition").innerText = proposition;
+    });
+
     let lock = false
     function lockVote() {
         document.querySelector(".changeButton").style="display:block";
@@ -117,7 +121,6 @@
     }
 
     socket.on('reset', () => {
-        openVote();
         unlockVote();
         localStorage.setItem('lastVote', null);
         localStorage.setItem('hasVoted', false);

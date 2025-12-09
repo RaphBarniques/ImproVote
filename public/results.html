@@ -85,6 +85,10 @@
         console.log("Received status update");
         });
 
+    socket.on('update-proposition', (proposition) => {
+        document.querySelector(".proposition").innerText = proposition;
+    });
+
     socket.on('reset', () => {
         result = {pour:0, contre:0, abstention:0}
         console.log("Votes reset");

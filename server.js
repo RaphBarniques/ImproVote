@@ -1,5 +1,3 @@
-// app.js
-
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
@@ -28,16 +26,12 @@ const custom = {
 custom.log("Program started");
 
 // Participants and Votes data
-let votes = { option1: 0, option2: 0 };
-let options = { option1: "Option 1", option2: "Option 2" };
-let isPollOpen = true;
-let matchEnded = false;
-let nextDate;
-let nextTeam1;
-let nextTeam2;
+let votes = { pour: 0, contre: 0, abstention:0 };
+let isPollOpen = false;
+let isResultShown = false;
+let proposition = "";
 let votedParticipants = {};
-let connectionCount = 0;
-let savedStats = [];
+let connexionCount = 0;
 
 // Serve HTML and static files
 app.use(express.static(__dirname + '/public'));
@@ -47,75 +41,111 @@ io.on('connection', (socket) => {
   const {participantId} = socket.handshake.query;
 
   custom.log("User " + participantId + " connected on socket " + socket.id);
-  connectionCount++;
-  io.emit('update-count', connectionCount);
+  connexionCount++;
+  io.emit('update-count', connexionCount);
 
   if (participantId == "null") {
     // If the participant doesn't have an ID, assign the socket ID
     custom.log("Assigned a new Id to " + socket.id);
     io.to(socket.id).emit('set-cookie', { participantId: socket.id, hasVoted: false });
-    io.to(socket.id).emit('update-options', options);
+
+    // Send status (If the vote is open and if this user has voted already)
     const hasVoted = votedParticipants[participantId] || false;
-    io.to(socket.id).emit('update-status', { participantId, isPollOpen, hasVoted});
-  } else if (participantId == "resultBoard"){
+    io.to(socket.id).emit('update-status', {isPollOpen, isResultShown});
+    io.to(socket.id).emit('update-user', hasVoted);
+
+    // Send current proposition
+    io.to(socket.id).emit('update-proposition', proposition);
+
+  } else if (participantId == "adminPanel" || participantId == "resultBoard") {
+    // Send current votes
     io.to(socket.id).emit('update-votes', votes);
-    io.to(socket.id).emit('update-options', options);
-    io.to(socket.id).emit('update-stats', savedStats);
-    connectionCount--;
-    io.emit('update-count', connectionCount);
+    
+    // Send current status
+    io.to(socket.id).emit('update-status', {isPollOpen, isResultShown});
+
+    // Send current proposition
+    io.to(socket.id).emit('update-proposition', proposition);
+
+    // Make sure it doesnt get added to the connexion count and update it
+    connexionCount--;
+    io.emit('update-count', connexionCount);
+
   } else {
     // If the participant has an ID, check if they have already voted
     const hasVoted = votedParticipants[participantId] || false;
-    io.to(socket.id).emit('update-status', { participantId, isPollOpen, hasVoted});
-    io.to(socket.id).emit('update-options', options);
+    // Send them status, proposition and if they can vote
+    io.to(socket.id).emit('update-status', {isPollOpen, isResultShown});
+    io.to(socket.id).emit('update-user', hasVoted);
+    io.to(socket.id).emit('update-proposition', proposition);
   }
 
-  if (matchEnded == true) {
-    io.emit('display-next', nextDate, nextTeam1, nextTeam2);
-  }
-
+  // Handle participant diconnecting
+  socket.on('disconnect', (socket) => {
+    if (participantId != "resultBoard" && participantId != "adminPanel") {
+      connexionCount--;
+    }
+    io.emit('update-count', connexionCount);
+    custom.log("User " + participantId + " disconnected on socket " + socket.id);
+  });
 
   // Handle participant voting
   socket.on('vote', ({ option, participantId, socketId }) => {
     custom.log(participantId + " on socket " + socketId + " has voted for " + option);
     // Check if the participant has not voted before and if the poll is open
-    if (!votedParticipants[participantId] && isPollOpen && option in options) {
+    if (!votedParticipants[participantId] && isPollOpen && option in votes) {
         custom.log("Vote registered");
       // Update votes and add participant to votedParticipants list
       votes[option]++;
-      votedParticipants[participantId] = true;
+      votedParticipants[participantId] = option;
+      console.log(votedParticipants)
       io.emit('update-votes', votes);
     } else {
       custom.log("Vote ignored");
     }
   });
 
-  socket.on('disconnect', (socket) => {
-    if (participantId != "resultBoard") {
-      connectionCount--;
+  // Handle vote change
+  socket.on('change-vote', ({option, participantId, socketId}) => {
+    custom.log(participantId + " on socket " + socketId + " has removed their vote for " + option);
+    if (votedParticipants[participantId] && isPollOpen && option in votes) {
+        custom.log("Removed vote registered");
+      // Update votes and add participant to votedParticipants list
+      let previousVote = votedParticipants[participantId];
+      votes[previousVote]--;
+      votedParticipants[participantId] = false;
+      io.to(socketId).emit('reset');
+      io.emit('update-votes', votes);
+    } else {
+      io.to(socketId).emit('reset');
     }
-    io.emit('update-count', connectionCount);
-    custom.log("User " + participantId + " disconnected on socket " + socket.id);
   });
 
   // Handle vote reset
   socket.on('reset-votes', () => {
     // Reset votes and participants who have voted
     custom.log("Votes reset");
-    votes = { option1: 0, option2: 0 };
+    votes = { pour: 0, contre: 0, abstention:0 };
     votedParticipants = {};
-    isPollOpen = true;
 
     // Broadcast the reset to all participants and result board
     io.emit('reset');
     io.emit('update-votes', votes);
   });
 
+  // Handle proposition set action
+  socket.on('set-proposition', (newProposition) => {
+    // Set the poll as open and broadcast the status to all participants
+    proposition = newProposition;
+    io.emit('update-proposition', proposition);
+    custom.log("Proposition set to : " + proposition)
+  });
+
   // Handle open poll action
   socket.on('open-poll', () => {
     // Set the poll as open and broadcast the status to all participants
     isPollOpen = true;
-    matchEnded = false;
+    io.emit('update-status', {isPollOpen, isResultShown});
     custom.log("Poll opened")
   });
 
@@ -123,35 +153,24 @@ io.on('connection', (socket) => {
   socket.on('close-poll', () => {
     // Set the poll as closed and broadcast the status to all participants
     isPollOpen = false;
+    io.emit('update-status', {isPollOpen, isResultShown});
     custom.log("Poll closed")
   });
 
-  // Handle displaying next week action
-  socket.on('set-display-next', (date, team1, team2) => {
+  // Handle close poll action
+  socket.on('show-results', () => {
     // Set the poll as closed and broadcast the status to all participants
-    isPollOpen = false;
-    matchEnded = true;
-    nextDate = date;
-    nextTeam1 = team1;
-    nextTeam2 = team2;
-    io.emit('display-next', date, team1, team2);
-    custom.log("Display was set for next match (" + team1 + ", " + team2 + ")")
+    isResultShown = true;
+    io.emit('update-status', {isPollOpen, isResultShown});
+    custom.log("Results displayed")
   });
 
-  // Handle option changes
-  socket.on('change-options', (option) => {
-    // Change the vote options
-    options.option1 = option.option1;
-    options.option2 = option.option2;
-
-    // Broadcast to all participants and result board
-    io.emit('update-options', options);
-    custom.log("Options set for " + option.option1 + ", " + option.option2)
-  });
-
-  socket.on('set-stats', (currentStats) => {
-    savedStats = currentStats;
-    io.emit('update-stats', savedStats);
+  // Handle close poll action
+  socket.on('hide-results', () => {
+    // Set the poll as closed and broadcast the status to all participants
+    isResultShown = false;
+    io.emit('update-status', {isPollOpen, isResultShown});
+    custom.log("Results hidden")
   });
 
 });
@@ -163,7 +182,11 @@ app.get('/guilde', (req, res) => {
 
 // Serve the result page
 app.get('/result', (req, res) => {
-  res.sendFile(__dirname + '/public/result.html');
+  res.sendFile(__dirname + '/public/results.html');
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(__dirname + '/public/admin.html');
 });
 
 // Error handling middleware

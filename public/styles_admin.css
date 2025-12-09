@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    padding-inline:7vw;
+    background-color: #f7f7f7;
+    font-family: "Montserrat";
+}
+
+header, section, main {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ 
+}
+
+.logo {
+    height: 40px;
+}
+
+main {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+section {
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.proposition {
+    text-align: center;
+}
+
+.headerClosed {
+    display: none;
+}
+
+.option, .stat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: clamp(110px, 20vw, 140px);
+    height: clamp(110px, 20vw, 140px);
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform 0.25s, background-color 0.25s;
+}
+
+.stat {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 15px;
+}
+
+.optionNumber {
+    font-size: 25px;
+}
+
+.buttonPanel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    font-weight: 400;
+    border: none;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: 0.25s;
+}
+
+@media (hover:hover) and (pointer:fine){
+    button:hover, button.active {
+        background-color: #F05D5F;
+        color: white;
+    }
+}
+
+@media (hover:none) and (pointer:coarse){
+    button:active {
+        background-color: #F05D5F;
+        color: white;
+    }
+}
+
+button.active {
+        background-color: #F05D5F;
+        color: white;
+    }
+
+button:disabled {
+    background-color: rgb(217, 217, 217);
+    color: #676767;
+}
+
+textarea {
+    width: 350px;
+    height: 200px;
+    border-radius: 10px;
+    padding: 1rem;
+    border: none;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+

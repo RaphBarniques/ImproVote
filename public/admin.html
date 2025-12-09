@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panneau de contrôle</title>
+    <link rel="stylesheet" href="styles_admin.css">
+</head>
+<body>
+    <h3>Panneau de contrôle</h3>
+    <h4>Résultat du vote</h4>
+    <main class="voteStats">
+        <div class="stat"><span class="optionNumber connexions">--</span>Connexions</div>
+        <div class="stat"><span class="optionNumber votes">--</span>Votes</div>
+    </main>
+    <main class="voteResults">
+        <div class="option"><span class="optionNumber pour">--</span>Pour</div>
+        <div class="option"><span class="optionNumber contre">--</span>Contre</div>
+        <div class="option"><span class="optionNumber abstention">--</span>Abstention</div>
+    </main>
+    <h4>Contrôle du vote</h4>
+    <section class="buttonPanel">
+        <button class="openVoteButton" onclick="socket.emit('open-poll');">Ouvrir</button>
+        <button class="closeVoteButton" onclick="socket.emit('close-poll');">Fermer</button>
+        <button class="resetButton" disabled onclick="socket.emit('reset-votes');">Reset</button>
+    </section>
+    <h4>Contrôle du tableau</h4>
+    <section>
+        <section class="buttonPanel">
+        <button class="showButton" onclick="socket.emit('show-results');">Afficher</button>
+        <button class="hideButton" onclick="socket.emit('hide-results');">Masquer</button>
+    </section>
+        <h4>Proposition</h4>
+        <textarea name="proposition" placeholder="Écrire une proposition" id="proposition">
+Étant donné que, CITRUS sauve des vies et que les devs sont trop cools, Félix Robillard de Montmorency propose que la Coupe Pamplemousse soit renommée la coupe CITRUS
+        </textarea>
+        <section class="buttonPanel">
+            <button class="submitButton" onclick="submitProposition()">Soumettre</button>
+            <button class="clearButton" onclick="clearProposition()">Effacer</button>
+        </section>
+    </section>
+</body>   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+<script>
+    const socket = io({
+      query: {
+        participantId: "adminPanel",
+      }, path :"/guilde/socket.io/"
+    });
+
+    socket.on('update-status', ({isPollOpen, isResultShown}) => {
+      console.log("Recieved status update. Poll open : " + isPollOpen + " , Results shown : " + isResultShown);
+      isPollOpen ? openVote() : closeVote();
+      isResultShown ? showResults() : hideResults();
+    });
+
+    socket.on('update-proposition', (proposition) => {
+      console.log("Recieved proposition update. Proposition : " + proposition);
+      document.querySelector("#proposition").value = proposition;
+    });
+
+    socket.on('update-count', (connexionCount) => {
+      console.log("Recieved connection update. Connection count : " + connexionCount);
+      document.querySelector(".connexions").innerText = connexionCount;
+    });
+
+    socket.on('update-votes', (votes) => {
+      console.log("Recieved vote update. Pour : " + votes.pour + ", Contre" + votes.contre + ", Abstention:" + votes.abstention);
+      document.querySelector(".pour").innerText = votes.pour;
+      document.querySelector(".contre").innerText = votes.contre;
+      document.querySelector(".abstention").innerText = votes.abstention;
+      document.querySelector(".votes").innerText = votes.pour + votes.contre + votes.abstention;
+    });
+
+    function openVote(){
+        document.querySelector(".openVoteButton").classList.add("active");
+        document.querySelector(".closeVoteButton").classList.remove("active");
+        document.querySelector(".resetButton").disabled = true;
+    }
+
+    function closeVote(){
+        document.querySelector(".openVoteButton").classList.remove("active");
+        document.querySelector(".closeVoteButton").classList.add("active");
+        document.querySelector(".resetButton").disabled = false;
+    }
+    
+    function showResults(){
+        document.querySelector(".showButton").classList.add("active");
+        document.querySelector(".hideButton").classList.remove("active");
+    }
+
+    function hideResults(){
+        document.querySelector(".showButton").classList.remove("active");
+        document.querySelector(".hideButton").classList.add("active");
+    }
+
+    function submitProposition() {
+        let newProposition = document.querySelector("#proposition").value;
+        socket.emit('set-proposition', newProposition);
+        console.log("set proposition " + newProposition)
+    }
+
+    function clearProposition() {
+        document.querySelector("#proposition").value = "";
+    }
+</script>
+</html>

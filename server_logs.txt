@@ -1,1 +1,12 @@
-Changed to V13
+Changed to V13[09-12-2025, 12:32:02] User adminPanel disconnected on socket undefined
+[09-12-2025, 12:32:02] User iKFYMnK5kLXlsr6jAAAB disconnected on socket undefined
+[09-12-2025, 12:34:15] User e9BMZYWZFx_YQz5pAAAH connected on socket 7bXdIz1d-fWrMv0lAAA5
+[09-12-2025, 12:34:48] User e9BMZYWZFx_YQz5pAAAH disconnected on socket undefined
+[09-12-2025, 13:47:05] User e9BMZYWZFx_YQz5pAAAH connected on socket TR-cz2XczVOGeNSnAAA7
+[09-12-2025, 13:47:39] User e9BMZYWZFx_YQz5pAAAH disconnected on socket undefined
+[09-12-2025, 13:47:39] User e9BMZYWZFx_YQz5pAAAH connected on socket kXQ0UOh-6OSIKKp5AAA9
+[09-12-2025, 13:47:40] Vote registered
+[09-12-2025, 13:47:40] e9BMZYWZFx_YQz5pAAAH on socket kXQ0UOh-6OSIKKp5AAA9 has voted for pour
+[09-12-2025, 13:47:50] User e9BMZYWZFx_YQz5pAAAH disconnected on socket undefined
+[09-12-2025, 13:47:50] User e9BMZYWZFx_YQz5pAAAH connected on socket e9S1pGd7y8SJDpo8AAA_
+[09-12-2025, 13:47:59] User e9BMZYWZFx_YQz5pAAAH disconnected on socket undefined

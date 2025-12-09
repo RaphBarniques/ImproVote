@@ -4,8 +4,16 @@ const socketIO = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, {
+/*const io = socketIO(server, {
   path: "/guilde/socket.io/"
+});*/
+const io = socketIO(server, {
+  path: "/guilde/socket.io/",
+  cors: {
+    origin: ["https://vote.pamps.ca"], // where your frontend lives
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 const fs = require('fs')

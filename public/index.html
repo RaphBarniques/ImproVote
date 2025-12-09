@@ -43,10 +43,10 @@
     }
 </script>
 <script>
-    const socket = io({
-        query: {
-            participantId: localStorage.getItem('participantId'),
-        }, path :"/guilde/socket.io/"
+    const socket = io("https://improvote.onrender.com", {
+        path: "/guilde/socket.io/",
+        query: { participantId: localStorage.getItem('participantId') },
+        transports: ["websocket"]
     });
 
     let socketId;

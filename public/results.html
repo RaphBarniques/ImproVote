@@ -39,10 +39,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
     // Handle connexion and identification
-    const socket = io({
-      query: {
-        participantId: "resultBoard", //Avoid being part of the connection count
-      }, path :"/guilde/socket.io/"
+    const socket = io("https://improvote.onrender.com", {
+        path: "/guilde/socket.io/",
+        query: { participantId: "resultBoard" },
+        transports: ["websocket"]
     });
 
     let results;

@@ -42,10 +42,10 @@
 </body>   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
-    const socket = io({
-      query: {
-        participantId: "adminPanel",
-      }, path :"/guilde/socket.io/"
+    const socket = io("https://improvote.onrender.com", {
+        path: "/guilde/socket.io/",
+        query: { participantId: "adminPanel" },
+        transports: ["websocket"]
     });
 
     socket.on('update-status', ({isPollOpen, isResultShown}) => {

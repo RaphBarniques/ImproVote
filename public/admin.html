@@ -48,7 +48,7 @@
         statusEl.classList.add("visible");
         statusEl.textContent = msg;
         if (!sticky) {
-            setTimeout(() => statusEl.classList.remove("visible"), 2000);
+            setTimeout(() => statusEl.classList.remove("visible"), 2500);
         }
         console.log(msg);
     };
@@ -76,7 +76,7 @@
     setStatus("Starting service…", true);
 
     for (let i = 1; i <= maxTries; i++) {
-
+        console.log(`Starting service… (attempt ${i}/${maxTries})`);
         const ok = await pingOnce(timeoutMs);
         if (ok) {
         setStatus("Service is ready.", false);
@@ -94,13 +94,13 @@
     (async () => {
     const ready = await waitForServer({ maxTries: 25, delayMs: 1000, timeoutMs : 1500 });
     if (!ready) return;
-
+    })();
+    
     const socket = io("https://improvote.onrender.com", {
         path: "/guilde/socket.io/",
         query: { participantId: "adminPanel" },
         transports: ["websocket"]
     });
-    
 
     socket.on('update-status', ({isPollOpen, isResultShown}) => {
       console.log("Recieved status update. Poll open : " + isPollOpen + " , Results shown : " + isResultShown);
@@ -125,7 +125,7 @@
       document.querySelector(".abstention").innerText = votes.abstention;
       document.querySelector(".votes").innerText = votes.pour + votes.contre + votes.abstention;
     });
-    })();
+    
 
     function openVote(){
         document.querySelector(".openVoteButton").classList.add("active");

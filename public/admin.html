@@ -39,14 +39,68 @@
             <button class="clearButton" onclick="clearProposition()">Effacer</button>
         </section>
     </section>
+    <div id="serverStatus"></div>
 </body>   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
+    const statusEl = document.getElementById("serverStatus");
+    const setStatus = (msg, sticky) => {
+        statusEl.classList.add("visible");
+        statusEl.textContent = msg;
+        if (!sticky) {
+            setTimeout(() => statusEl.classList.remove("visible"), 2000);
+        }
+        console.log(msg);
+    };
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    async function pingOnce(timeoutMs) {
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+            const res = await fetch("https://improvote.onrender.com/ping", {
+            cache: "no-store",
+            signal: controller.signal,
+            });
+            return res.ok;
+        } catch {
+            return false;
+        } finally {
+            clearTimeout(t);
+        }
+    }
+
+    async function waitForServer({ maxTries, delayMs, timeoutMs } = {}) {
+    setStatus("Starting service…", true);
+
+    for (let i = 1; i <= maxTries; i++) {
+
+        const ok = await pingOnce(timeoutMs);
+        if (ok) {
+        setStatus("Service is ready.", false);
+        return true;
+        }
+
+        // wait before next attempt (unless it was the last one)
+        if (i < maxTries) await sleep(delayMs);
+    }
+
+    setStatus("Service unreachable. Please try again.", true);
+    return false;
+    }
+
+    (async () => {
+    const ready = await waitForServer({ maxTries: 25, delayMs: 1000, timeoutMs : 1500 });
+    if (!ready) return;
+
     const socket = io("https://improvote.onrender.com", {
         path: "/guilde/socket.io/",
         query: { participantId: "adminPanel" },
         transports: ["websocket"]
     });
+    
 
     socket.on('update-status', ({isPollOpen, isResultShown}) => {
       console.log("Recieved status update. Poll open : " + isPollOpen + " , Results shown : " + isResultShown);
@@ -71,6 +125,7 @@
       document.querySelector(".abstention").innerText = votes.abstention;
       document.querySelector(".votes").innerText = votes.pour + votes.contre + votes.abstention;
     });
+    })();
 
     function openVote(){
         document.querySelector(".openVoteButton").classList.add("active");

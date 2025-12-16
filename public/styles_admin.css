@@ -130,5 +130,23 @@ textarea {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
+#serverStatus {
+    position: absolute;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    font-weight: 600;
+    text-align: center;
+    top: -75px;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+#serverStatus.visible {
+    top: 15px;
+    opacity: 1;
+}
+
 
 

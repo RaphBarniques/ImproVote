@@ -1,19 +1,26 @@
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
+const cors = require('cors');
+
 
 const app = express();
+const ALLOWED_ORIGINS = [
+  "https://vote.pamps.ca",
+  "https://improvote.onrender.com", // optional if you also serve pages there
+  "http://127.0.0.1:5000",          // dev live
+  "http://127.0.0.1:3300",          // dev node
+];
+
 const server = http.createServer(app);
-/*const io = socketIO(server, {
-  path: "/guilde/socket.io/"
-});*/
+
 const io = socketIO(server, {
   path: "/guilde/socket.io/",
   cors: {
-    origin: ["https://vote.pamps.ca"], // where your frontend lives
+    origin: ALLOWED_ORIGINS,     // same list as above
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,           // match Express if you use cookies
+  },
 });
 
 const fs = require('fs')
@@ -183,6 +190,20 @@ io.on('connection', (socket) => {
 
 });
 
+app.use(cors({
+  origin: (origin, cb) => {
+    // allow same-origin / curl / server-to-server (no Origin header)
+    if (!origin) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    return cb(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, // only needed if you use cookies; otherwise can be false
+}));
+
+app.options("*", cors());
+
 // Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
@@ -196,6 +217,9 @@ app.get('/result', (req, res) => {
 app.get('/admin', (req, res) => {
   res.sendFile(__dirname + '/public/admin.html');
 });
+
+app.get("/ping", (req, res) => res.status(200).send("ok"));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
